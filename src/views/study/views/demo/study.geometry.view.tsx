@@ -21,6 +21,6 @@ export default defineComponent({
             cube.rotation.y += 0.01
         })
 
-        return () => (<div></div>)
+        return () => <div></div>
     },
 })

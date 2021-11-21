@@ -13,6 +13,11 @@ export const studyViewRouter: RouteRecordRaws[] = [
                 name: 'study-geometry',
                 component: () => import('./views/demo/study.geometry.view'),
             },
+            {
+                path: 'lines',
+                name: 'study-lines',
+                component: () => import('./views/demo/study.lines.view'),
+            },
         ],
     }
 ]

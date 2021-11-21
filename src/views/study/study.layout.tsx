@@ -4,8 +4,6 @@ import { RouterView } from 'vue-router';
 export default defineComponent({
     name: 'StudyLayout',
     setup() {
-        return () => (
-            <RouterView></RouterView>
-        )
+        return () => <RouterView></RouterView>
     }
 })

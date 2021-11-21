@@ -32,7 +32,10 @@ export class BaseScene {
         this.options = options
         this.camera = new PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000)
         this.parentNode = this.sceneNode.select(this.options?.parentSelect ?? 'body')
+        
         this.renderer.setSize(innerWidth, innerHeight)
+        this.camera.lookAt(0, 0, 0)
+        this.camera.position.set(0, 0, 100)
 
         if (options?.id) {
             this.sceneNode.select(`#${options.id}`) && this.render.destroy()
