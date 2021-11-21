@@ -1,0 +1,30 @@
+{
+  "name": "three-project",
+  "version": "0.0.0",
+  "author": {
+    "email": "admin@slmblog.com",
+    "name": "shi-lai-mu",
+    "url": "https://github.com/shi-lai-mu"
+  },
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.134.0",
+    "vue": "^3.0.4",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.9",
+    "@types/three": "^0.134.0",
+    "@vitejs/plugin-vue": "^1.9.4",
+    "@vitejs/plugin-vue-jsx": "^1.2.0",
+    "@vue/compiler-sfc": "^3.0.4",
+    "rollup-plugin-visualizer": "^5.5.2",
+    "sass": "^1.43.4",
+    "typescript": "^4.5.2",
+    "vite": "^2.6.14",
+    "vite-plugin-compression": "^0.3.5"
+  }
+}
