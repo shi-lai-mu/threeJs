@@ -5,13 +5,13 @@ export const studyViewRouter: RouteRecordRaws[] = [
     {
         path: '/study',
         name: 'study-view',
-        redirect: { name: 'study-demo' },
+        redirect: { name: 'study-geometry' },
         component: () => import('./study.layout'),
         children: [
             {
-                path: 'demo',
-                name: 'study-demo',
-                component: () => import('./views/demo/study.demo.view'),
+                path: 'geometry',
+                name: 'study-geometry',
+                component: () => import('./views/demo/study.geometry.view'),
             },
         ],
     }

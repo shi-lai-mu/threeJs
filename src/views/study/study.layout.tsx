@@ -5,9 +5,7 @@ export default defineComponent({
     name: 'StudyLayout',
     setup() {
         return () => (
-            <>
-                <RouterView></RouterView>
-            </>
+            <RouterView></RouterView>
         )
     }
 })
