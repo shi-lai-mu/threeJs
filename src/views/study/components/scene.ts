@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
+import { OrthographicCamera, PerspectiveCamera, Scene, sRGBEncoding, Vector3, WebGLRenderer } from 'three'
 
 export const { innerWidth, innerHeight } = window
 
@@ -20,7 +20,10 @@ export class BaseScene {
     /** 场景实例 */
     readonly scene = new Scene()
     /** 渲染器实例 */
-    readonly renderer = new WebGLRenderer()
+    readonly renderer = new WebGLRenderer({
+        antialias: true,
+        alpha: true,
+    })
     /** 摄像机实例 */
     readonly camera: PerspectiveCamera
     /** 场景父级节点 */
@@ -30,11 +33,32 @@ export class BaseScene {
 
     constructor(options?: BaseSceneOptions) {
         this.options = options
+        const targetPosition = new Vector3(0, 0, 0)
+
+        const scale = innerHeight * 0.005 + 4.8
+        const initialCameraPosition = new Vector3(
+            20 * Math.sin(0.2 * Math.PI),
+            10,
+            20 * Math.cos(0.2 * Math.PI),
+        )
+        const orthographicCamera = new OrthographicCamera(
+            -scale,
+            scale,
+            scale,
+            0.01,
+            50000
+        )
+        orthographicCamera.position.copy(initialCameraPosition)
+        orthographicCamera.lookAt(targetPosition)
+
+
         this.camera = new PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000)
         this.parentNode = this.sceneNode.select(this.options?.parentSelect ?? 'body')
         
         this.renderer.setSize(innerWidth, innerHeight)
-        this.camera.lookAt(0, 0, 0)
+        this.renderer.setPixelRatio(window.devicePixelRatio)
+        this.renderer.outputEncoding = sRGBEncoding
+        this.camera.lookAt(targetPosition)
         this.camera.position.set(0, 0, 100)
 
         if (options?.id) {
