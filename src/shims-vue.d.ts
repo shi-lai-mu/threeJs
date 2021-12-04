@@ -9,3 +9,13 @@ declare module 'makeit-captcha' {
   const makeitCaptcha: any
   export default makeitCaptcha
 }
+
+declare module 'spectorjs' {
+  export const Spector: any
+}
+
+
+declare module '*.glsl' {
+  const glsl: string
+  export default glsl
+}
