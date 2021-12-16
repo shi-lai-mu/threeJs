@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { studyViewRouter } from "@/views/study/study.router";
+import { demoViewRouter, examplesViewRouter } from "@/views/study/studay.router";
 
 /** 路由实例 */
 export const MainRouter = createRouter({
@@ -11,6 +11,7 @@ export const MainRouter = createRouter({
           path: '/',
           component: () => import('@/layouts/default/layout'),
         },
-        ...studyViewRouter,
+        ...examplesViewRouter,
+        ...demoViewRouter,
     ],
 })

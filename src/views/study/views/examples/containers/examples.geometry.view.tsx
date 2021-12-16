@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 
-import { BaseScene } from '@/views/study/components/scene'
+import { BaseScene } from '@/utils/scene'
 
 export default defineComponent({
     name: 'StudeyGeometry',

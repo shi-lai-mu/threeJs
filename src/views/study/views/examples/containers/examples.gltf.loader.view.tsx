@@ -6,16 +6,16 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { OrbitControls  } from 'three/examples/jsm/controls/OrbitControls'
 
-import { BaseScene } from '@/views/study/components/scene'
+import { BaseScene } from '@/utils/scene'
 
-import firefliesVertexShader from './shaders/firedlies/vertex.glsl?raw'
-import firefliesFragmentShader from './shaders/firedlies/fragment.glsl?raw'
+import firefliesVertexShader from '@/views/study/assets/shaders/firedlies/vertex.glsl?raw'
+import firefliesFragmentShader from '@/views/study/assets/shaders/firedlies/fragment.glsl?raw'
 
-import portalVertexShader from './shaders/portal/vertex.glsl?raw'
-import portalFragmentShader from './shaders/portal/fragment.glsl?raw'
+import portalVertexShader from '@/views/study/assets/shaders/portal/vertex.glsl?raw'
+import portalFragmentShader from '@/views/study/assets/shaders/portal/fragment.glsl?raw'
 
 
-import './styles/loader.scss'
+import '@/views/study/assets/styles/loader.scss'
 
 // const spector = new Spector()
 // spector.displayUI()

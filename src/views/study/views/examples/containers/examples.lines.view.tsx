@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { BufferGeometry, Line, LineBasicMaterial, Vector3 } from 'three'
 
-import { BaseScene } from '@/views/study/components/scene'
+import { BaseScene } from '@/utils/scene'
 
 export default defineComponent({
     name: 'StudeyLines',
