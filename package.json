@@ -13,6 +13,7 @@
   "dependencies": {
     "dat.gui": "^0.7.7",
     "glsl-loader": "^0.0.1",
+    "gsap": "3.5.1",
     "spectorjs": "^0.9.27",
     "three": "^0.134.0",
     "vue": "^3.0.4",
