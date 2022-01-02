@@ -11,8 +11,11 @@ export default defineComponent({
         const scene = new Scene()
 
         // cube
-        const geometry = new BoxGeometry(1, 1, 1)
-        const material = new MeshBasicMaterial({ color: 0xff0000 })
+        const geometry = new BoxGeometry(1, 1, 1, 2, 2, 2)
+        const material = new MeshBasicMaterial({
+            color: 0xff0000,
+            wireframe: true,
+        })
         const mesh = new Mesh(geometry, material)
         scene.add(mesh)
 
@@ -31,10 +34,10 @@ export default defineComponent({
         reSize()
         
 
-        let cursor = {
-            x: 0,
-            y: 0,
-        }
+        // let cursor = {
+        //     x: 0,
+        //     y: 0,
+        // }
 
         // camera
         const camera = new PerspectiveCamera(75, screenSize.width / screenSize.height)
