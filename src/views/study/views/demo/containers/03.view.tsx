@@ -1,11 +1,23 @@
-import { AmbientLight, BoxGeometry, BufferAttribute, CubeTextureLoader, DoubleSide, Mesh, MeshBasicMaterial, MeshStandardMaterial, MirroredRepeatWrapping, NearestFilter, PerspectiveCamera, PlaneBufferGeometry, PointLight, RepeatWrapping, Scene, SphereBufferGeometry, Texture, TextureLoader, TorusBufferGeometry, WebGLRenderer } from "three";
-import { defineComponent, onMounted, ref } from "vue";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {
+    AmbientLight,
+    BufferAttribute,
+    CubeTextureLoader,
+    Mesh,
+    MeshStandardMaterial,
+    PerspectiveCamera,
+    PlaneBufferGeometry,
+    PointLight,
+    Scene,
+    WebGLRenderer,
+} from 'three'
+import { defineComponent, onMounted, ref } from 'vue'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-import imageSource from '/static/textures/Door_Wood/basecolor.jpg';
-import { loaderTextureTask } from "@/utils/texture"; 
+import { loaderTextureTask } from '@/utils/texture' 
 
-console.log(imageSource);
+// 全景 转 6位图   https://matheowis.github.io/HDRI-to-CubeMap/
+// HDR 全景图 资源 https://polyhaven.com/
+// 纹理质感        https://github.com/nidorx/matcaps
 
 export default defineComponent({
 
@@ -137,7 +149,7 @@ export default defineComponent({
             controls.enableDamping = true
 
             // animation
-            // const clock = new Clock();
+            // const clock = new Clock()
             const tick = () => {
                 // update camera
                 camera.aspect = screenSize.width / screenSize.height

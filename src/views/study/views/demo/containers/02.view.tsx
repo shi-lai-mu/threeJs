@@ -1,7 +1,7 @@
-import { BoxGeometry, Clock, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { defineComponent, onMounted, ref, render } from "vue";
+import { BoxGeometry, Clock, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three'
+import { defineComponent, onMounted, ref, render } from 'vue'
 import gsap from 'gsap'
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default defineComponent({
 
@@ -83,7 +83,7 @@ export default defineComponent({
             controls.enableDamping = true
 
             // animation
-            // const clock = new Clock();
+            // const clock = new Clock()
             const tick = () => {
 
                 // update camera

@@ -23,6 +23,11 @@ export const demoViewRouter: RouteRecordRaws[] = [
                 name: 'demo-03',
                 component: () => import('./containers/03.view'),
             },
+            {
+                path: '04',
+                name: 'demo-04',
+                component: () => import('./containers/04.view'),
+            },
         ],
     }
 ]

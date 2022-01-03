@@ -1,5 +1,5 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { defineComponent, onMounted, ref } from "vue";
+import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
 
