@@ -4,8 +4,11 @@ import {
     BufferGeometry,
     Clock,
     Color,
+    Event,
+    Intersection,
     Mesh,
     MeshBasicMaterial,
+    Object3D,
     PCFSoftShadowMap,
     PerspectiveCamera,
     Points,
@@ -14,6 +17,7 @@ import {
     Scene,
     SphereBufferGeometry,
     SphereGeometry,
+    Vector2,
     Vector3,
     WebGLRenderer,
 } from 'three'
@@ -39,8 +43,8 @@ export default defineComponent({
         const parameters = {}
         const reSize = () => {
             screenSize = {
-                width: window.innerWidth, 
-                height: window.innerHeight,
+                width: window.outerWidth, 
+                height: window.outerHeight ,
             }
         }
 
@@ -64,14 +68,13 @@ export default defineComponent({
         scene.add(sphere1, sphere2, sphere3)
 
         const raycaster = new Raycaster()
-        const rayOrigin = new Vector3(- 7, 0, 0)
-        const rayDirection = new Vector3(7, 0, 0)
+        const rayOrigin = new Vector3(- 10, 0, 0)
+        const rayDirection = new Vector3(10, 0, 0)
         rayDirection.normalize()
 
         // 显示相交线
         const directionCount = Math.abs(rayOrigin.x - rayDirection.x) * 2
         const displayDirectionLineX = new Float32Array(directionCount * 3)
-        console.log(directionCount, rayOrigin.x - rayDirection.x, rayOrigin.x, rayDirection.x);
         
         for (let i = 0; i < directionCount; i ++) {
             const i3 = i * 3
@@ -92,6 +95,45 @@ export default defineComponent({
         scene.add(new Points(geometry, material))
 
         reSize()
+
+        const mouse = new Vector2()
+        const mouseMove = ({ clientX, clientY }: MouseEvent) => {
+            mouse.x = clientX / screen.width * 2 - 1
+            mouse.y = - (clientY / screen.height * 2 - 1)
+        }
+        let intersectTarget: Intersection<Object3D<Event>> | null = null
+
+        // 球体点击
+        const click = () => {
+            switch (intersectTarget?.object) {
+                case sphere1:
+                    console.log('click sphere1')
+                    intersectTarget?.object.material.color.set('#ff00ff')
+                    break
+                case sphere2:
+                    console.log('click sphere2')
+                    break
+                case sphere3:
+                    console.log('click sphere3')
+                    break
+            }
+        }
+        // 球体 双点击
+        const dbClick = (e: MouseEvent) => {
+            switch (intersectTarget?.object) {
+                case sphere1:
+                    console.log('click sphere1')
+                    intersectTarget?.object.material.color.set('#ffff00')
+                    e.stopPropagation()
+                    break
+                case sphere2:
+                    console.log('click sphere2')
+                    break
+                case sphere3:
+                    console.log('click sphere3')
+                    break
+            }
+        }
 
         // camera
         const camera = new PerspectiveCamera(75, screenSize.width / screenSize.height)
@@ -139,18 +181,33 @@ export default defineComponent({
                 sphere2.position.z = Math.cos(elapsedTime * 0.5) * 4
                 sphere3.position.z = Math.sin(elapsedTime) * 3
 
-                raycaster.set(rayOrigin, rayDirection)
+                // 检测对象合集
                 const objectsToTest = [sphere1, sphere2, sphere3]
+
+                // 根据摄像机的点位进行 检测
+                raycaster.setFromCamera(mouse, camera)
+                // 点对点距离性 检测
+                // raycaster.set(rayOrigin, rayDirection)
                 const intersects = raycaster.intersectObjects(objectsToTest)
 
-                
-                for (const object of objectsToTest) {
-                    object.material.color.set('#ff0000')
+                // 对象检测 
+                // for (const object of objectsToTest) {
+                //     object.material.color.set('#ff0000')
+                // }
+                // for (const intersect of intersects) {
+                //     intersect.object!.material.color.set('#0000ff')
+                // }
+
+                // 设置当前移入对象
+                if (intersects.length) {
+                    console.log('移入')
+                    intersectTarget = intersects[0]
+                } else {
+                    if (intersectTarget) {
+                        intersectTarget = null
+                        console.log('移出')
+                    }
                 }
-                for (const intersect of intersects) {
-                    intersect.object!.material.color.set('#0000ff')
-                }
-                
 
                 // update camera
                 camera.aspect = screenSize.width / screenSize.height
@@ -171,7 +228,7 @@ export default defineComponent({
         })
 
         return () => (
-            <canvas ref={canvas}></canvas>
+            <canvas ref={canvas} onMousemove={mouseMove} onClick={click} onDblclick={dbClick}></canvas>
         )
     }
 })
