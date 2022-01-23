@@ -53,6 +53,11 @@ export const demoViewRouter: RouteRecordRaws[] = [
                 name: '09-Raycaster',
                 component: () => import('./containers/09Raycaster.view'),
             },
+            {
+                path: '10',
+                name: '10-Physics',
+                component: () => import('./containers/10Physics.view'),
+            },
         ],
     }
 ]
