@@ -1,10 +1,15 @@
-import { OrthographicCamera, PerspectiveCamera, Scene, sRGBEncoding, Vector3, WebGLRenderer } from 'three'
+import {
+    OrthographicCamera,
+    PerspectiveCamera,
+    Scene,
+    sRGBEncoding,
+    Vector3,
+    WebGLRenderer,
+} from 'three'
 
 export const { innerWidth, innerHeight } = window
 
-
 let animateStatus = false
-
 
 export type BaseSceneOptions = {
     /** 父节点 选择器 */
@@ -13,10 +18,8 @@ export type BaseSceneOptions = {
     id?: string
 }
 
-
 /** 场景 控制器 */
 export class BaseScene {
-
     /** 场景实例 */
     readonly scene = new Scene()
     /** 渲染器实例 */
@@ -39,22 +42,15 @@ export class BaseScene {
         const initialCameraPosition = new Vector3(
             20 * Math.sin(0.2 * Math.PI),
             10,
-            20 * Math.cos(0.2 * Math.PI),
+            20 * Math.cos(0.2 * Math.PI)
         )
-        const orthographicCamera = new OrthographicCamera(
-            -scale,
-            scale,
-            scale,
-            0.01,
-            50000
-        )
+        const orthographicCamera = new OrthographicCamera(-scale, scale, scale, 0.01, 50000)
         orthographicCamera.position.copy(initialCameraPosition)
         orthographicCamera.lookAt(targetPosition)
 
-
         this.camera = new PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000)
         this.parentNode = this.sceneNode.select(this.options?.parentSelect ?? 'body')
-        
+
         this.renderer.setSize(innerWidth, innerHeight)
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.outputEncoding = sRGBEncoding
@@ -72,7 +68,7 @@ export class BaseScene {
         /** 选择节点 */
         select: (selectString: string) => {
             return document.querySelector(selectString)
-        }
+        },
     }
 
     // document.body.append(renderer.domElement)
@@ -105,11 +101,13 @@ export class BaseScene {
         /** 开始 循环 */
         start: () => {
             animateStatus = true
-            this.animate.update()
+            //   this.animate.update()
+
+            this.renderer.setAnimationLoop(this.animate.update)
         },
         /** 停止 循环 */
         stop() {
-            animateStatus = false 
+            animateStatus = false
         },
         /** 重置 循环 */
         reset: () => {
@@ -129,11 +127,10 @@ export class BaseScene {
         extendUpdate: [
             () => {
                 if (animateStatus) {
-                    requestAnimationFrame(this.animate.update)
+                    // requestAnimationFrame(this.animate.update)
                     this.renderer.render(this.scene, this.camera)
                 }
-            }
-        ]
+            },
+        ],
     }
-
 }
