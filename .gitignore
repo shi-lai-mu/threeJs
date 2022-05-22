@@ -2,7 +2,10 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+.env*
+id_rsa*
 
+*.sh
 *.local
 .env.development
 .env.production

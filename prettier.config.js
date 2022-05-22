@@ -14,7 +14,7 @@ module.exports = {
   // 使用单引号
   singleQuote: true,
   // 缩进
-  tabWidth: 2,
+  tabWidth: 4,
   // 使用 tab 缩进
   useTabs: false,
   // 后置逗号，多行对象、数组在最后一行增加逗号

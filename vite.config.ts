@@ -5,9 +5,9 @@ import viteCompression from 'vite-plugin-compression'
 import visualizer from 'rollup-plugin-visualizer'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
-export default (
-  ({ mode }) => defineConfig({
-    base: `/${loadEnv(mode, process.cwd()).VITE_APP_PREFIX}/`,
+export default ({ mode }) =>
+  defineConfig({
+    base: `${loadEnv(mode, process.cwd()).VITE_APP_PREFIX}`,
     build: {
       assetsDir: 'assets',
       // 去除console
@@ -26,8 +26,7 @@ export default (
       },
     },
     server: {
-      port: 8888,
-      open: true,
+      port: 8111,
       strictPort: true,
       fs: {
         allow: ['.'],
@@ -78,4 +77,3 @@ export default (
       }),
     ],
   })
-)
