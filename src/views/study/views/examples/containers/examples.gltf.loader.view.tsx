@@ -1,10 +1,11 @@
 import { defineComponent, onDeactivated } from 'vue'
 // import { Spector } from 'spectorjs'
 import { GUI } from 'dat.gui'
-import { Event, AxesHelper, Color, DirectionalLight, LightProbe, MeshBasicMaterial, Object3D, sRGBEncoding, TextureLoader, Vector3, BufferGeometry, PointsMaterial, BufferAttribute, Points, ShaderMaterial, AdditiveBlending, Clock } from 'three'
+import { Event, AxesHelper, Color, DirectionalLight, LightProbe, MeshBasicMaterial, Object3D, sRGBEncoding, TextureLoader, Vector3, BufferGeometry, PointsMaterial, BufferAttribute, Points, ShaderMaterial, AdditiveBlending, Clock, Raycaster, Matrix4 } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { OrbitControls  } from 'three/examples/jsm/controls/OrbitControls'
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
 
 import { BaseScene } from '@/utils/scene'
 
@@ -13,6 +14,7 @@ import firefliesFragmentShader from '@/views/study/assets/shaders/firedlies/frag
 
 import portalVertexShader from '@/views/study/assets/shaders/portal/vertex.glsl?raw'
 import portalFragmentShader from '@/views/study/assets/shaders/portal/fragment.glsl?raw'
+import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 
 import '@/views/study/assets/styles/loader.scss'
@@ -41,6 +43,7 @@ export default defineComponent({
         // const controls = new TrackballControls(camera, parentNode as HTMLElement)
 
         camera.position.set(-30, 40, 30)
+        
         
         renderer.setClearColor(debugObject.clearColor)
         gui
@@ -127,6 +130,9 @@ export default defineComponent({
 
         // renderer.setClearColor(new Color(0xcccccc))
         renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.xr.enabled = true
+        // renderer.shadowMap.type = PCFSoftShadowMap
+        document.body.appendChild( VRButton.createButton( renderer ) );
 
         // scene.add(axes)
 
@@ -173,9 +179,112 @@ export default defineComponent({
                 gltf.scene.rotation.y += -300
 
 
-                const control = new OrbitControls(camera, renderer.domElement)
-                control.autoRotate = true
-                control.target = new Vector3(0, -20, 0)
+                // const control = new OrbitControls(camera, renderer.domElement)
+                // control.autoRotate = true
+                // control.target = new Vector3(0, -20, 0)
+
+                console.log('end');
+                const controls = new PointerLockControls( camera);
+                controls.getObject().position.set(0, 50, 0);
+                // controls.getObject().lookAt(gltf.scene.position)
+                scene.add( controls.getObject() );
+                // 捕捉光标
+                parentNode?.addEventListener('click', () => {
+                    controls.lock()
+                })
+                let velocity = new Vector3(); //移动速度变量
+                let direction = new Vector3(); //移动的方向变量
+                let rotation = new Vector3(); //当前的相机朝向
+                let speed = 500; //控制器移动速度
+                let upSpeed = 200; //控制跳起时的速度
+                let spaceUp = true;
+                let canJump = false;
+                let downKeyBoard = ''
+                const onKeyDown = ( event: KeyboardEvent ) => {
+                    switch ( event.keyCode ) {
+                        case 38: // up
+                        case 87: // w
+                            downKeyBoard = 'w';
+                            break;
+                        case 37: // left
+                        case 65: // a
+                            downKeyBoard = 'a'
+                            break;
+                        case 40: // down
+                        case 83: // s
+                            downKeyBoard = 's'
+                            break;
+                        case 39: // right
+                        case 68: // d
+                            downKeyBoard = 'd'
+                            break;
+                        case 32: // space
+                            if ( canJump ) velocity.y += upSpeed;
+                            canJump = false;
+                            break;
+                    }
+                };
+                const onKeyUp = () => {
+                    downKeyBoard = ''
+                    direction.set(0, 0, 0)
+                    velocity.set(0, 0, 0)
+                }
+
+                document.addEventListener( 'keydown', onKeyDown, false );
+                document.addEventListener( 'keyup', onKeyUp, false );
+
+                //获取到控制器对象
+                var control = controls.getObject();
+
+                //获取刷新时间
+                var delta =  clock.getDelta()
+                animate.extendUpdate.push(() => {
+                    //velocity每次的速度，为了保证有过渡
+                    velocity.x -= velocity.x * 10.0 * delta;
+                    velocity.z -= velocity.z * 10.0 * delta;
+                    velocity.y -= 9.8 * 50.0 * delta; // 默认下降的速度
+
+                    //获取当前按键的方向并获取朝哪个方向移动
+                    direction.z = Number( downKeyBoard === 'w' ) - Number( downKeyBoard === 's' );
+                    direction.x = Number( downKeyBoard === 'a' ) - Number( downKeyBoard === 'd' );
+
+
+                    if (['w', 's'].includes(downKeyBoard)) velocity.z -= direction.z * speed * delta;
+                    if (['a', 'd'].includes(downKeyBoard)) velocity.x -= direction.x * speed * delta;
+
+                    var upRaycaster = new Raycaster(new Vector3(), new Vector3( 0, 1, 0), 0, 10);
+                    var horizontalRaycaster = new Raycaster(new Vector3(), new Vector3(), 0, 10);
+                    var downRaycaster = new Raycaster(new Vector3(), new Vector3( 0, -1, 0), 0, 10);
+
+                    // horizontalRaycaster.set( control.position , rotation );
+                    // downRaycaster.set( control.position , rotation );
+                    
+                    //horizontal.setDirection(rotation);
+
+                    downRaycaster.ray.origin.copy( control.position );
+                    var intersections = downRaycaster.intersectObjects( scene.children, true);
+                    var onObject = intersections.length > 0;
+                    
+                    //判断是否停在了立方体上面
+                    if ( onObject === true ) {
+                        velocity.y = Math.max( 0, velocity.y );
+                        canJump = true;
+                    }
+
+                    //将法向量的值归一化
+                    direction.normalize();
+
+                    //根据速度值移动控制器
+                    control.translateOnAxis(new Vector3(
+                        velocity.x,
+                        0,
+                        velocity.z,
+                    ), delta)
+                    control.position.y += velocity.y * 0.05
+                    // control.translateX( velocity.x * delta );
+                    // control.translateY( velocity.y * delta );
+                    // control.translateZ( velocity.z * delta );
+                })
             },
             xhr => {
                 console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
